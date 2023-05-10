@@ -1,0 +1,2 @@
+export const CDN_URL = "https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/";
+export const LOGO_URL = "https://th.bing.com/th?id=OIP.0A9pOFphVgMHWNT5jeM6HgHaHb&w=249&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2";

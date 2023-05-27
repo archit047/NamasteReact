@@ -2,13 +2,8 @@ import RestaurantCard from "../components/RestaurantCard";
 import { useState, useEffect } from "react";
 import Shimmer from "../components/Shimmer";
 import { Link } from "react-router-dom";
-
-function filterData(searchText, listOfRestaurants) {
-  let filters = listOfRestaurants.filter((list) =>
-    list?.data?.data.name.toLowerCase().includes(searchText.toLowerCase())
-  );
-  return filters;
-}
+import { filterData } from "../utils/helper";
+import useOnline from "../utils/useOnline";
 
 const Body = () => {
   // local State Variable - super powerful variable
@@ -25,7 +20,7 @@ const Body = () => {
   }, []);
 
   async function getRestaurants() {
-    const data = await fetch(
+    let data = await fetch(
       "https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.5773608&lng=77.0815155&offset=127&sortBy=RELEVANCE&pageType=SEE_ALL&page_type=DESKTOP_SEE_ALL_LISTING"
     );
     const json = await data.json();
@@ -33,6 +28,12 @@ const Body = () => {
     setAllRestaurants(json.data.cards);
   }
   console.log("render");
+
+  const isOnline = useOnline();
+
+  if (!isOnline) {
+    return <h1>Please check your internet connection...</h1>;
+  }
   // Conditional Rendering
   // if restaurant is empty => shimmer UI
   // if restaurant has data => actual data UI

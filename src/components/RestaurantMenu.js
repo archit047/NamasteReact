@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CDN_URL } from "../utils/constants";
 import Shimmer from "./Shimmer";
+import useRestaurant from "../utils/useRestaurant";
 
 const RestaurantMenu = () => {
   const params = useParams();
   const { id } = params;
+
+  const restaurant = useRestaurant(id);
 
   const [restaurantss, setRestaurantss] = useState({});
   const [restaurantsList, setRestaurantsList] = useState([]);
@@ -33,6 +36,7 @@ const RestaurantMenu = () => {
     // );
 
     setRestaurantss(json.data?.cards[0]?.card?.card?.info);
+    console.log(json.data?.cards[0]?.card?.card?.info);
     setRestaurantsList(
       json.data?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card
         ?.itemCards

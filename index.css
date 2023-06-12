@@ -1,71 +1,17 @@
-.header {
-  display: flex;
-  justify-content: space-between;
-  border: 1px solid black;
-}
+/*
+Normal Native CSS
+SCSS
+Inline CSS
+Component Libraries - Materail UI , Base UI, Ant, Chakra
+Styled Component
 
-.logo {
-  width: 8rem;
-}
+Tailwind CSS Framework
+  --CSS on the go(in the same file)
+  -reusability
+  -less bundle size
+  -Flexible UI(Customizations)
+*/
 
-.nav-items {
-  padding: 0px 20px;
-}
-
-.nav-items > ul {
-  font-size: 14px;
-  display: flex;
-  list-style-type: none;
-}
-
-.nav-items > ul > li {
-  padding: 10px;
-  margin: 10px;
-}
-
-.res-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.res-card {
-  margin: 5px;
-  padding: 5px;
-  width: 200px;
-  height: 22rem;
-}
-
-.res-card:hover {
-  cursor: pointer;
-  border: 1px solid black;
-}
-
-.search {
-  padding: 10px;
-}
-
-.res-logo {
-  width: 100%;
-}
-
-.filter-btn {
-  margin: 10px;
-  cursor: pointer;
-}
-
-
-.restaurant-list{
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.shimmer-card{
-  width: 200px;
-  height: 200px;
-  background-color: lightgray;
-  margin: 20px;
-}
-
-.menu{
-  display: flex;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

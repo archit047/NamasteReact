@@ -66,4 +66,12 @@ useEffect(() => {
 # empty dependency array => once after render
 # dependency array is [searchText] => once after initial render + everytime render (My search text changes)
             
-
+# we will use react testing library and Jest.
+<!-- Install react testing library
+install jest
+configure jest
+Installing jest environment jsdom
+Create my first test 
+Configure our babel with jest
+wrote expect sum test 
+gitignore coverage report-->

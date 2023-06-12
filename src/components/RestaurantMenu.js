@@ -3,12 +3,21 @@ import { useParams } from "react-router-dom";
 import { CDN_URL } from "../utils/constants";
 import Shimmer from "./Shimmer";
 import useRestaurant from "../utils/useRestaurant";
+import { addItem } from "../utils/cartSlice";
+import { useDispatch } from "react-redux";
 
 const RestaurantMenu = () => {
   const params = useParams();
   const { id } = params;
 
   const restaurant = useRestaurant(id);
+
+  const dispatch = useDispatch();
+
+  const addFoodItem =(res)=>{
+    dispatch(addItem(res));
+    console.log(res);
+  }
 
   const [restaurantss, setRestaurantss] = useState({});
   const [restaurantsList, setRestaurantsList] = useState([]);
@@ -26,7 +35,8 @@ const RestaurantMenu = () => {
 
   async function getRestaurantInfo() {
     const data = await fetch(
-      "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=28.5773608&lng=77.0815155&restaurantId="+id
+      "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=28.5773608&lng=77.0815155&restaurantId=" +
+        id
     );
     const json = await data.json();
 
@@ -38,13 +48,15 @@ const RestaurantMenu = () => {
     setRestaurantss(json.data?.cards[0]?.card?.card?.info);
     console.log(json.data?.cards[0]?.card?.card?.info);
     setRestaurantsList(
-      json.data?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card
-        ?.itemCards
+      json.data?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card
+        ?.card?.itemCards
     );
   }
 
-  return(!restaurantss)?<Shimmer/>: (
-    <div className="menu">
+  return !restaurantss ? (
+    <Shimmer />
+  ) : (
+    <div className="flex">
       <div>
         <h1>Restaurant id: {id}</h1>
         <h2>{restaurantss.name}</h2>
@@ -54,11 +66,13 @@ const RestaurantMenu = () => {
         <h3>{restaurantss.avgRating} stars</h3>
         <h3>{restaurantss.costForTwoMessage}</h3>
       </div>
-      <div>
+      <div className="p-5">
         <h1>Menu</h1>
         <ul>
           {restaurantsList.map((res) => (
-            <li key={res?.card?.info?.id}>{res?.card?.info?.name}</li>
+            <li key={res?.card?.info?.id}>{res?.card?.info?.name} - <button className="p-1 bg-green-50" onClick={
+              ()=>addFoodItem(res.card.info)
+            }>ADD</button></li>
           ))}
         </ul>
       </div>

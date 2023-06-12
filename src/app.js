@@ -1,15 +1,19 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
 import Body from "./components/Body";
 import Footer from "./components/footer";
-import About from "./components/About";
+// import About from "./components/About";
 import Error from "./components/Error";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Contact from "./components/Contacts";
 import RestaurantMenu from "./components/RestaurantMenu";
 import Profile from "./components/Profile";
 import Shimmer from "./components/Shimmer";
+import UserContext from "./utils/userContext";
+import { Provider } from "react-redux";
+import store from "./utils/store";
+import Cart from "./components/Cart";
 // import Instamart from "./components/Instamart";
 
 //Chunking
@@ -20,15 +24,28 @@ import Shimmer from "./components/Shimmer";
 // Dynamic Import
 
 const Instamart = lazy(() => import("./components/Instamart"));
+const About = lazy(() => import("./components/About"));
 //Upon On Demand loading -> upon render -> suspend loading
 
 const AppLayout = () => {
+  const [user, setUser] = useState({
+    name: "Namaste React",
+    email: "suppport@namastedev.com",
+  });
+
   return (
-    <div className="app">
-      <Header />
-      <Outlet />
-      <Footer />
-    </div>
+    <Provider store={store}>
+      <UserContext.Provider
+        value={{
+          user: user,
+          setUser: setUser,
+        }}
+      >
+        <Header />
+        <Outlet />
+        <Footer />
+      </UserContext.Provider>
+    </Provider>
   );
 };
 
@@ -40,11 +57,19 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Body />,
+        element: (
+          <Body
+            user={{ name: "Namaste React", email: "suppport@namastedev.com" }}
+          />
+        ),
       },
       {
         path: "/about",
-        element: <About />,
+        element: (
+          <Suspense fallback={<Shimmer />}>
+            <About />
+          </Suspense>
+        ),
         children: [
           {
             path: "profile",
@@ -63,11 +88,15 @@ const appRouter = createBrowserRouter([
       {
         path: "/instamart",
         element: (
-          <Suspense fallback={<Shimmer/>}>
+          <Suspense fallback={<Shimmer />}>
             <Instamart />
           </Suspense>
         ),
       },
+      {
+        path:"/cart",
+        element:<Cart/>
+      }
     ],
   },
 ]);
@@ -75,3 +104,14 @@ const appRouter = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(<RouterProvider router={appRouter} />);
+
+/**
+ * AppLayout
+ *  (state=user)
+ *    - <Body user = {user}/>
+ *       - <RestaurantContainer user=>
+ *          - RestaurantCard user={user}
+ *            - <h4>{user}</h4>
+ *
+ * PROPS DRILLING
+ */
